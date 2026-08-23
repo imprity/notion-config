@@ -1,3 +1,5 @@
+dopath("my_utils")
+
 dopath("cfg_debian")
 
 ioncore.set{
@@ -5,85 +7,6 @@ ioncore.set{
 }
 
 dopath("cfg_defaults")
-
--- clear the log file
-;(function()
-    local f = io.open("/home/bae/.notion/log", "w")
-    if f then
-        f:write("")
-        f:close()
-    end
-end)()
-
-local function debug_print(thing) 
-    local f = io.open("/home/bae/.notion/log", "a")
-    if f then
-        f:write(tostring(str))
-        f:close()
-    end
-end
-
-local function debug_println(thing) 
-    debug_print(thing .. '\n')
-end
-
-local function safe(func)
-    return function(_, _sub, _chld)
-        local status, err = pcall(func, _, _sub, _chld)
-
-        if not status then
-            debug_println(err)
-        end
-    end
-end
-
-defbindings("WFrame.toplevel", {
-    bdoc("debug", "debug"),
-    kpress(META.."D", 
-    function()
-        debug_print('========================\n')
-        debug_print('clientwin_i\n')
-        debug_print('========================\n')
-        ioncore.clientwin_i(function(win)
-            debug_print(tostring(win:name()) .. '\n')
-            return true
-        end)
-        debug_print('========================\n')
-
-        local types = {
-            'WClientWin',
-            'WWindow',
-            'WRootWin',
-            'WMPlex',
-            'WFrame',
-            'WScreen',
-            'WInput',
-            'WEdln',
-            'WMessage',
-            'WGroup',
-            'WGroupWS',
-            'WGroupCW',
-            'WTiling',
-        }
-
-        for i, t in ipairs(types) do
-            debug_print('========================\n')
-            debug_print(t .. '\n')
-            debug_print('========================\n')
-            ioncore.region_i(function(reg)
-                debug_print(tostring(reg) .. ' name: ' .. reg:name() .. ' parent: '.. tostring(reg:parent()) ..'\n')
-                return true
-            end, t)
-            debug_print('========================\n')
-        end
-    end),
-
-    bdoc("restart ion", "restart"),
-    kpress(META.."R", 
-    function()
-        ioncore.restart()
-    end),
-})
 
 defbindings("WTiling", { 
     submap("Mod1+Tab", {
