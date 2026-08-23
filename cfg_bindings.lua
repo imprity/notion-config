@@ -30,10 +30,14 @@ defbindings("WScreen", {
     kpress(ALTMETA.."Tab", "ioncore.goto_next(_chld, 'left')",
            "_chld:non-nil"),
 
-    ---------------------
-    -- hjkl focus move
-    ---------------------
+    bdoc("Switch to next/previous object within current screen."),
+    kpress("Control+Mod4+Left", "WScreen.switch_prev(_)"),
+    kpress("Control+Mod4+Right", "WScreen.switch_next(_)"),
+
     submap("Mod1+Tab", {
+        ---------------------
+        -- hjkl focus move
+        ---------------------
         bdoc("Move Focus Left"),
         kpress("H", get_move_focus_func('left')),
 
@@ -45,6 +49,10 @@ defbindings("WScreen", {
 
         bdoc("Move Focus Down"),
         kpress("J", get_move_focus_func('down')),
+        ---------------------
+
+        bdoc("Create a new workspace of chosen default type."),
+        kpress("W", "ioncore.create_ws(_)"),
     }),
 })
 
