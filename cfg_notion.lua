@@ -1,7 +1,7 @@
 dopath("cfg_debian")
 
 ioncore.set{
-    mousefocus="disabled",
+    warp=false,
 }
 
 dopath("cfg_defaults")
@@ -87,8 +87,8 @@ defbindings("WFrame.toplevel", {
 
 defbindings("WTiling", { 
     submap("Mod1+Tab", {
-        -- alone
-        bdoc("Leave Frame Alone"),
+        -- only
+        bdoc("Leave Frame Only"),
         kpress("AnyModifier+O", 
         function(tiling, frame)
             local frames = {}
@@ -120,6 +120,9 @@ defbindings("WTiling", {
     }),
 })
 
+---------------------
+-- hjkl focus move
+---------------------
 local function get_move_focus_func(dir)
     return function(_, _sub, _chld)
         if _chld ~= nil then
@@ -130,7 +133,6 @@ local function get_move_focus_func(dir)
     end
 end
 
--- hjkl focus move
 defbindings("WScreen", {
     submap("Mod1+Tab", {
         bdoc("Move Focus Left"),
@@ -147,6 +149,9 @@ defbindings("WScreen", {
     }),
 })
 
+---------------------
+-- hjkl win move
+---------------------
 local function get_move_win_func(dir)
     return function(group, _sub, _chld)
         local manager = group:manager()
@@ -167,7 +172,6 @@ local function get_move_win_func(dir)
     end
 end
 
--- hjkl win move
 defbindings("WGroupCW", {
     submap("Mod1+Tab", {
         bdoc("Move Win Left"),
