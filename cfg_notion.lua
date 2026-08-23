@@ -6,6 +6,7 @@ ioncore.set{
 
 dopath("cfg_defaults")
 
+-- clear the log file
 ;(function()
     local f = io.open("/home/bae/.notion/log", "w")
     if f then
@@ -14,11 +15,25 @@ dopath("cfg_defaults")
     end
 end)()
 
-local function debug_print(str) 
+local function debug_print(thing) 
     local f = io.open("/home/bae/.notion/log", "a")
     if f then
-        f:write(str)
+        f:write(tostring(str))
         f:close()
+    end
+end
+
+local function debug_println(thing) 
+    debug_print(thing .. '\n')
+end
+
+local function safe(func)
+    return function(_, _sub, _chld)
+        local status, err = pcall(func, _, _sub, _chld)
+
+        if not status then
+            debug_println(err)
+        end
     end
 end
 
@@ -79,7 +94,6 @@ defbindings("WTiling", {
             local frames = {}
 
             tiling:managed_i(function(other_frame)
-                debug_print(tostring(other_frame)..'\n')
                 table.insert(frames, other_frame)
                 return true
             end)
