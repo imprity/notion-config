@@ -5,6 +5,38 @@
 -- Bindings for the tilings.
 defbindings("WTiling", {
     submap("Mod1+Tab", {
+        -- only
+        bdoc("Leave Frame Only", "only"),
+        kpress("AnyModifier+O", 
+        function(tiling, frame)
+            local frames = {}
+
+            tiling:managed_i(function(other_frame)
+                table.insert(frames, other_frame)
+                return true
+            end)
+
+            for _, other_frame in ipairs(frames) do
+                if other_frame ~= frame then
+                    tiling:unsplit_at(other_frame)
+                end
+            end
+        end),
+
+        -- split
+        bdoc("Split Horizontally", "split"),
+        kpress("S", 
+        function(tiling, frame)
+            tiling:split_at(frame, 'bottom', true)
+        end),
+
+        bdoc("Split Vertically", "vsplit"),
+        kpress("Shift+S", 
+        function(tiling, frame)
+            tiling:split_at(frame, 'left', true)
+        end),
+
+        -- Destroy
         bdoc("Destroy current frame.", "unsplit"),
         kpress("Q", "WTiling.unsplit_at(_, _sub)"),
     }),

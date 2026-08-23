@@ -1,23 +1,19 @@
 --
--- Notion core configuration file
---
-
-
---
 -- Bindings. This includes global bindings and bindings common to
 -- screens and all types of frames only. See modules' configuration
 -- files for other bindings.
 --
 
-
 -- WScreen context bindings
---
--- The bindings in this context are available all the time.
---
--- The variable META should contain a string of the form 'Mod4+'
--- where Mod4 maybe replaced with the modifier you want to use for most
--- of the bindings. Similarly ALTMETA may be redefined to add a
--- modifier to some of the F-key bindings.
+local function get_move_focus_func(dir)
+    return function(_, _sub, _chld)
+        if _chld ~= nil then
+            ioncore.goto_next(_chld, dir, {
+                nowrap = true
+            })
+        end
+    end
+end
 
 defbindings("WScreen", {
     bdoc("Display the main menu."),
@@ -33,6 +29,23 @@ defbindings("WScreen", {
     bdoc("Backward-circulate focus.", "<-frame"),
     kpress(ALTMETA.."Tab", "ioncore.goto_next(_chld, 'left')",
            "_chld:non-nil"),
+
+    ---------------------
+    -- hjkl focus move
+    ---------------------
+    submap("Mod1+Tab", {
+        bdoc("Move Focus Left"),
+        kpress("H", get_move_focus_func('left')),
+
+        bdoc("Move Focus Right"),
+        kpress("L", get_move_focus_func('right')),
+
+        bdoc("Move Focus Up"),
+        kpress("K", get_move_focus_func('up')),
+
+        bdoc("Move Focus Down"),
+        kpress("J", get_move_focus_func('down')),
+    }),
 })
 
 
@@ -46,7 +59,43 @@ defbindings("WClientWin", {
 
 -- Client window group bindings
 
+local function get_move_win_func(dir)
+    return function(group, _sub, _chld)
+        local manager = group:manager()
+
+        if not manager then
+            return
+        end
+
+        local neighbor = ioncore.navi_next(manager, dir, {nowrap = true})
+
+        if not neighbor or not obj_is(neighbor, "WFrame") then
+            return
+        end
+
+        neighbor:attach(group, {switchto = true})
+
+        group:goto_focus()
+    end
+end
+
 defbindings("WGroupCW", {
+    submap("Mod1+Tab", {
+        ---------------------
+        -- hjkl win move
+        ---------------------
+        bdoc("Move Win Left"),
+        kpress("Shift+H", get_move_win_func('left')),
+
+        bdoc("Move Win Right"),
+        kpress("Shift+L", get_move_win_func('right')),
+
+        bdoc("Move Win Up"),
+        kpress("Shift+K", get_move_win_func('up')),
+
+        bdoc("Move Win Down"),
+        kpress("Shift+J", get_move_win_func('down')),
+    }),
 })
 
 
