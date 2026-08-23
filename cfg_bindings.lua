@@ -68,6 +68,13 @@ defbindings("WMPlex", {
 -- Frames for transient windows ignore this bindmap
 
 defbindings("WMPlex.toplevel", {
+    submap("Mod1+Tab", {
+        bdoc("Query for command line to execute.", "run"),
+        kpress("semicolon", "mod_query.query_exec(_)"),
+
+        bdoc("Query for Lua code to execute.", "lua"),
+        kpress("Shift+semicolon", "mod_query.query_lua(_)"),
+    }),
 }) 
 
 -- WFrame context bindings
