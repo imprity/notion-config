@@ -83,21 +83,38 @@ local function get_move_win_func(dir, swap)
             return
         end
 
-        local neighbor_children = {}
-
         if swap then
+            local manager_children = {}
+            local neighbor_children = {}
+
+            local neighbor_cur = neighbor:current()
+            local manager_cur = manager:current()
+
+            manager:managed_i(function(child)
+                table.insert(manager_children, child)
+                return true
+            end)
             neighbor:managed_i(function(child)
                 table.insert(neighbor_children, child)
                 return true
             end)
-        end
 
-        neighbor:attach(group, {switchto = true})
-
-        if swap then
-            for _, child in ipairs(neighbor_children) do
-                manager:attach(child)
+            for _, child in ipairs(manager_children) do
+                if child == manager_cur then
+                    neighbor:attach(child, {switchto = true})
+                else
+                    neighbor:attach(child)
+                end
             end
+            for _, child in ipairs(neighbor_children) do
+                if child == neighbor_cur then
+                    manager:attach(child, {switchto = true})
+                else
+                    manager:attach(child)
+                end
+            end
+        else
+            neighbor:attach(group, {switchto = true})
         end
 
         group:goto_focus()
@@ -125,16 +142,16 @@ defbindings("WGroupCW", {
         -- hjkl win swap
         ---------------------
         bdoc("Swap Win Left"),
-        kpress("Control+H", get_move_win_func('left', true)),
+        kpress("Mod1+H", get_move_win_func('left', true)),
 
         bdoc("Swap Win Right"),
-        kpress("Control+L", get_move_win_func('right', true)),
+        kpress("Mod1+L", get_move_win_func('right', true)),
 
         bdoc("Swap Win Up"),
-        kpress("Control+K", get_move_win_func('up', true)),
+        kpress("Mod1+K", get_move_win_func('up', true)),
 
         bdoc("Swap Win Down"),
-        kpress("Control+J", get_move_win_func('down', true)),
+        kpress("Mod1+J", get_move_win_func('down', true)),
     }),
 })
 
