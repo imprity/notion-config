@@ -69,11 +69,11 @@ defbindings("WClientWin", {
 
 -- Client window group bindings
 
-local function get_move_win_func(dir)
+local function get_move_win_func(dir, swap)
     return function(group, _sub, _chld)
         local manager = group:manager()
 
-        if not manager then
+        if not manager or not obj_is(manager, "WFrame") then
             return
         end
 
@@ -83,7 +83,22 @@ local function get_move_win_func(dir)
             return
         end
 
+        local neighbor_children = {}
+
+        if swap then
+            neighbor:managed_i(function(child)
+                table.insert(neighbor_children, child)
+                return true
+            end)
+        end
+
         neighbor:attach(group, {switchto = true})
+
+        if swap then
+            for _, child in ipairs(neighbor_children) do
+                manager:attach(child)
+            end
+        end
 
         group:goto_focus()
     end
@@ -105,6 +120,21 @@ defbindings("WGroupCW", {
 
         bdoc("Move Win Down"),
         kpress("Shift+J", get_move_win_func('down')),
+
+        ---------------------
+        -- hjkl win swap
+        ---------------------
+        bdoc("Swap Win Left"),
+        kpress("Control+H", get_move_win_func('left', true)),
+
+        bdoc("Swap Win Right"),
+        kpress("Control+L", get_move_win_func('right', true)),
+
+        bdoc("Swap Win Up"),
+        kpress("Control+K", get_move_win_func('up', true)),
+
+        bdoc("Swap Win Down"),
+        kpress("Control+J", get_move_win_func('down', true)),
     }),
 })
 
