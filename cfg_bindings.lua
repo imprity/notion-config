@@ -152,6 +152,8 @@ defbindings("WGroupCW", {
 
         bdoc("Swap Win Down"),
         kpress("Mod1+J", get_move_win_func('down', true)),
+
+        kpress_wait("F", "WGroup.set_fullscreen(_, 'toggle')"),
     }),
 })
 
@@ -168,6 +170,9 @@ defbindings("WMPlex", {
     submap("Mod1+Tab", {
         bdoc("Close current object.", "close"),
         kpress_wait("X", "WRegion.rqclose_propagate(_, _sub)"),
+
+        bdoc("Detach (float) or reattach an object to its previous location.", "detach"),
+        kpress("D", "ioncore.detach(_chld, 'toggle')", "_chld:non-nil"),
     }),
 })
 
