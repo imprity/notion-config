@@ -8,3 +8,4 @@ ioncore.set{
 
 dopath("cfg_defaults")
 
+dopath("change_mod_query.lua")
