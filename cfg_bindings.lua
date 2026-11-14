@@ -15,13 +15,8 @@ local function get_move_focus_func(dir)
     end
 end
 
+
 defbindings("WScreen", {
-    bdoc("Display the main menu."),
-    mpress("Button3", "mod_menu.pmenu(_, _sub, 'mainmenu')"),
-
-    bdoc("Display the window list menu."),
-    mpress("Button2", "mod_menu.pmenu(_, _sub, 'windowlist')"),
-
     -- super tab cycling
     bdoc("Forward-circulate focus.", "->frame"),
     kpress(META.."Tab", "ioncore.goto_next(_chld, 'right')",
@@ -53,8 +48,6 @@ defbindings("WScreen", {
 
         bdoc("Create a new workspace of chosen default type."),
         kpress("W", "ioncore.create_ws(_)"),
-
-        kpress("F12", "mod_query.query_menu(_, _sub, 'mainmenu', 'Main menu:')"),
     }),
 })
 
@@ -185,6 +178,9 @@ defbindings("WMPlex.toplevel", {
 
         bdoc("Query for Lua code to execute.", "lua"),
         kpress("Shift+semicolon", "mod_query.query_lua(_)"),
+
+        bdoc("Display context menu.", "ctx"),
+        kpress("M", "mod_menu.menu(_, _sub, 'ctxmenu', {big=true})"),
     }),
 }) 
 
@@ -194,8 +190,10 @@ defbindings("WMPlex.toplevel", {
 -- frame bindings are found in some modules' configuration files.
 
 defbindings("WFrame", {
-    bdoc("Display context menu."),
-    mpress("Button3", "mod_menu.pmenu(_, _sub, 'ctxmenu')"),
+    submap("Mod1+Tab", {
+        bdoc("Begin move/resize mode."),
+        kpress("R", "WFrame.begin_kbresize(_)"),
+    }),
 
     bdoc("Switch the frame to display the object indicated by the tab."),
     mclick("Button1@tab", "WFrame.p_switch_tab(_)"),
@@ -278,35 +276,6 @@ defbindings("WMoveresMode", {
     kpress(META.."Up",    "WMoveresMode.move(_, 0,-1)"),
     kpress(META.."Down",  "WMoveresMode.move(_, 0, 1)"),
 })
-
-
---
--- Menu definitions
---
-
-
--- Main menu
-defmenu("mainmenu", {
-    menuentry("Run...",         "mod_query.query_exec(_)"),
-    menuentry("Terminal",       "mod_query.exec_on_merr(_, XTERM or 'x-terminal-emulator')"),
-    menuentry("Lock screen",
-        "notioncore.exec_on(_, notioncore.lookup_script('notion-lock'))"),
-    menuentry("Help",           "mod_query.query_man(_)"),
-    menuentry("About Notion",      "mod_query.show_about_ion(_)"),
-    submenu("Styles",           "stylemenu"),
-    submenu("Debian",           "Debian"),
-    submenu("Session",          "sessionmenu"),
-})
-
-
--- Session control menu
-defmenu("sessionmenu", {
-    menuentry("Save",           "ioncore.snapshot()"),
-    menuentry("Restart",        "ioncore.restart()"),
-    menuentry("Restart TWM",    "ioncore.restart_other('twm')"),
-    menuentry("Exit",           "ioncore.shutdown()"),
-})
-
 
 -- Context menu (frame actions etc.)
 defctxmenu("WFrame", "Frame", {

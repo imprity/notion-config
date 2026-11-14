@@ -1,5 +1,7 @@
 dopath("my_utils")
 
+dopath("my_functions")
+
 dopath("cfg_debian")
 
 ioncore.set{
