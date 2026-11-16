@@ -22,13 +22,13 @@ de.defstyle("*", {
     border_style = "elevated",
     border_sides = "tb",
 
-    font = "xft:Unifont:size=14",
+    font = "xft:Unifont:size=" .. tostring(local_settings.font_size),
     text_align = "center",
 })
 
 
 de.defstyle("tab", {
-    font = "xft:Unifont:size=12",
+    font = "xft:Unifont:size=" .. tostring(local_settings.font_size),
 
     de.substyle("active-selected", {
         highlight_colour = "#aaaacc",
