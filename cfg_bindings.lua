@@ -341,6 +341,25 @@ defbindings("WMoveresMode", {
     kpress(META.."Right", "WMoveresMode.move(_, 1, 0)"),
     kpress(META.."Up",    "WMoveresMode.move(_, 0,-1)"),
     kpress(META.."Down",  "WMoveresMode.move(_, 0, 1)"),
+
+    -- alt vim mode
+    bdoc("Grow in specified direction."),
+    kpress("H", "WMoveresMode.resize(_, 1, 0, 0, 0)"),
+    kpress("L", "WMoveresMode.resize(_, 0, 1, 0, 0)"),
+    kpress("K", "WMoveresMode.resize(_, 0, 0, 1, 0)"),
+    kpress("J", "WMoveresMode.resize(_, 0, 0, 0, 1)"),
+
+    bdoc("Shrink in specified direction."),
+    kpress("Shift+H", "WMoveresMode.resize(_,-1, 0, 0, 0)"),
+    kpress("Shift+L", "WMoveresMode.resize(_, 0,-1, 0, 0)"),
+    kpress("Shift+K", "WMoveresMode.resize(_, 0, 0,-1, 0)"),
+    kpress("Shift+J", "WMoveresMode.resize(_, 0, 0, 0,-1)"),
+
+    bdoc("Move in specified direction."),
+    kpress(META.."H", "WMoveresMode.move(_,-1, 0)"),
+    kpress(META.."L", "WMoveresMode.move(_, 1, 0)"),
+    kpress(META.."K", "WMoveresMode.move(_, 0,-1)"),
+    kpress(META.."J", "WMoveresMode.move(_, 0, 1)"),
 })
 
 -- Context menu (frame actions etc.)
