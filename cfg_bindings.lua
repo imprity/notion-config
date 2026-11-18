@@ -238,6 +238,7 @@ defbindings("WMPlex", {
 -- Frames for transient windows ignore this bindmap
 
 defbindings("WMPlex.toplevel", {
+    submap("Mod1+Tab", {
         bdoc("Query for application using rofi.", "run"),
         kpress("semicolon", "mod_query.exec_on_merr(_, 'rofi -show run')"),
 
