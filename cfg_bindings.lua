@@ -240,7 +240,7 @@ defbindings("WMPlex", {
 defbindings("WMPlex.toplevel", {
     submap("Mod1+Tab", {
         bdoc("Query for application using rofi.", "run"),
-        kpress("semicolon", "mod_query.exec_on_merr(_, 'rofi -show run')"),
+        kpress("semicolon", "mod_query.exec_on_merr(_, 'rofi -show drun')"),
 
         bdoc("Query for Lua code to execute.", "lua"),
         kpress("Shift+semicolon", "mod_query.query_lua(_)"),
