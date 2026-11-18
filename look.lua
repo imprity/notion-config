@@ -95,7 +95,21 @@ de.defstyle("frame-tiled-alt", {
 
 de.defstyle("frame-floating", {
     bar = "shaped",
-    padding_pixels = 0,
+    border_sides = "all",
+    highlight_pixels = 2,
+    shadow_pixels = 2,
+    padding_pixels = 1,
+
+    de.substyle("active", {
+        highlight_colour = "#666699",
+        shadow_colour    = "#666699",
+        padding_colour   = "#666699",
+    }),
+    de.substyle("inactive", {
+        highlight_colour = "#9999bb",
+        shadow_colour    = "#9999bb",
+        padding_colour   = "#9999bb",
+    }),
 })
 
 de.defstyle("frame-transient", {
