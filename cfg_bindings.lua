@@ -165,16 +165,81 @@ defbindings("WMPlex", {
         kpress_wait("X", "WRegion.rqclose_propagate(_, _sub)"),
 
         bdoc("Detach (float) or reattach an object to its previous location.", "detach"),
-        kpress("D", "ioncore.detach(_chld, 'toggle')", "_chld:non-nil"),
+        kpress("D", function(wmplex, sub, child)
+            if not child then
+                return
+            end
+
+            ioncore.detach(child, 'toggle')
+
+            local manager = child:manager()
+
+            while manager ~= nil and not obj_is(manager, 'WFrame') do
+                manager = manager:manager()
+            end
+
+            if not manager then
+                return
+            end
+
+            local manager_manager = manager:manager()
+
+            if not manager_manager then
+                return
+            end
+
+            -- child is tiled
+            if obj_is(manager_manager, 'WTiling') then
+                return
+            end
+
+            -- TOOD: these could be settings
+            local my_cap_w = 700
+            local my_cap_h = 700
+
+            local geom = manager:geom()
+            if not geom then
+                return;
+            end
+
+            local new_geom = {w = 0, h = 0, x = 0, y = 0}
+
+            local size_hints = child:size_hints()
+
+            -- try to respect min_w and min_h of child
+            if size_hints.min_w and size_hints.min_h then
+                new_geom.w = math.max(size_hints.min_w, 100)
+                new_geom.h = math.max(size_hints.min_h, 100)
+            else -- if not, let's set arbitrary one
+                new_geom.w = geom.w
+                if new_geom.w > my_cap_w then
+                    new_geom.w = my_cap_w
+                end
+
+                new_geom.h = geom.h
+                if new_geom.h > my_cap_h then
+                    new_geom.h = my_cap_h
+                end
+            end
+
+            new_geom.x = (geom.w - new_geom.w) * 0.5 + geom.x
+            new_geom.y = (geom.h - new_geom.h) * 0.5 + geom.y
+
+            new_geom.x = math.floor(new_geom.x)
+            new_geom.y = math.floor(new_geom.y)
+            new_geom.w = math.floor(new_geom.w)
+            new_geom.h = math.floor(new_geom.h)
+
+            manager:rqgeom(new_geom)
+        end),
     }),
 })
 
 -- Frames for transient windows ignore this bindmap
 
 defbindings("WMPlex.toplevel", {
-    submap("Mod1+Tab", {
-        bdoc("Query for command line to execute.", "run"),
-        kpress("semicolon", "mod_query.query_exec(_)"),
+        bdoc("Query for application using rofi.", "run"),
+        kpress("semicolon", "mod_query.exec_on_merr(_, 'rofi -show run')"),
 
         bdoc("Query for Lua code to execute.", "lua"),
         kpress("Shift+semicolon", "mod_query.query_lua(_)"),
