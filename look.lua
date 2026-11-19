@@ -93,22 +93,63 @@ de.defstyle("frame-tiled-alt", {
     bar = "none",
 })
 
+local bright_grey = "#f0f0f0"
+local grey = "#cccccc"
+local dark_grey = "#525252"
+
 de.defstyle("frame-floating", {
     bar = "shaped",
     border_sides = "all",
+    border_style = "ridge",
+
+    padding_pixels = 4,
     highlight_pixels = 2,
-    shadow_pixels = 2,
-    padding_pixels = 1,
+    shadow_pixels = 3,
 
     de.substyle("active", {
-        highlight_colour = "#666699",
-        shadow_colour    = "#666699",
-        padding_colour   = "#666699",
+        highlight_colour =  bright_grey,
+        padding_colour   = grey,
+        shadow_colour   = dark_grey,
     }),
+
     de.substyle("inactive", {
-        highlight_colour = "#9999bb",
-        shadow_colour    = "#9999bb",
-        padding_colour   = "#9999bb",
+        highlight_colour =  bright_grey,
+        padding_colour   = grey,
+        shadow_colour   = dark_grey,
+    }),
+})
+
+de.defstyle("tab-frame-floating", {
+    border_sides = "lr",
+    border_style = "elevated",
+
+    padding_pixels = 3,
+    highlight_pixels = 2,
+    shadow_pixels = 3,
+
+    background_colour = grey,
+    foreground_colour = "#000000",
+
+    highlight_colour =  bright_grey,
+    padding_colour   = grey,
+    shadow_colour   = dark_grey,
+
+    de.substyle("active-selected", {
+        highlight_colour =  bright_grey,
+        padding_colour   = grey,
+        shadow_colour   = dark_grey,
+
+        background_colour = "#666699",
+        foreground_colour = "#eeeeee",
+    }),
+
+    de.substyle("inactive-selected", {
+        highlight_colour =  bright_grey,
+        padding_colour   = grey,
+        shadow_colour   = dark_grey,
+
+        background_colour = grey,
+        foreground_colour = "#000000",
     }),
 })
 
